@@ -37,17 +37,19 @@ jobs:
           script: |
             const fs = require('fs');
 
+            const release = 24946958;
             const path = 'artifact.txt';
             const name = '${{ matrix.wheel }}-${{ matrix.test }}.txt';
 
+            console.log('Fetch current assets');
             const assets = await github.repos.listAssetsForRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              release_id: 24946958,
+              release_id: release,
             });
-            console.log(assets);
-            const [asset] = (assets.data || assets).filter(a => a.name === name);
+            const [asset] = assets.data.filter(a => a.name === name);
             if(asset) {
+              console.log(`Delete asset ${asset.id}`);
               await github.repos.deleteReleaseAsset({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -55,12 +57,13 @@ jobs:
               });
             }
 
+            console.log(`Upload asset ${name}`);
             await github.repos.uploadReleaseAsset({
-              url: 'https://uploads.github.com/repos/mgjm/github-action-test/releases/24946958/assets{?name,label}',
+              url: `https://uploads.github.com/repos/${context.repo.owner}/${context.repo.repo}/releases/${release}/assets{?name,label}`,
               headers: {
                 'content-type': 'text/plain',
                 'content-length': fs.statSync(path).size,
               },
               name,
-              file: fs.readFileSync(path),
+              data: fs.readFileSync(path),
             });
