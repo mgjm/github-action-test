@@ -24,7 +24,4 @@ run echo 123
 section demo-end
 run true
 
-section demo-end
-run false
-
 section demo-end2

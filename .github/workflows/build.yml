@@ -40,7 +40,7 @@ jobs:
           exec ${{ matrix.wheel }}/build.sh
 
   done:
-    name: Setup environment
+    name: Done with environment
     runs-on: ubuntu-latest
     steps:
       - name: Done
