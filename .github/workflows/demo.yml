@@ -25,6 +25,6 @@ jobs:
           pwd
           mount
           ls -al
-          la -al *
+          ls -al *
           find .
           exec ${{ matrix.wheel }}/build.sh
