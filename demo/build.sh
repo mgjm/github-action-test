@@ -7,11 +7,11 @@ section() {
 run() {
 	echo "##[command]$@"
 	echo "##[group]Execute $1"
-	local code=0
-	"$@" || code=$?
+	local code=MISSING
+	("$@") || code=$?
 	echo "##[endgroup]"
 	echo "CODE=$code"
-	return $code
+	# return $code
 }
 
 section demo
