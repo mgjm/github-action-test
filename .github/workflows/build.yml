@@ -19,13 +19,13 @@ jobs:
             const release = 24946958;
 
             console.log({...context});
-            const assets = await github.repos.updateRelease({
+            await github.repos.updateRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
               release_id: release,
               body: `Last build at ${new Date().toUTCString()}.`,
             });
-            const assets = await github.git.updateRef({
+            await github.git.updateRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: 'refs/tags/tag-master'
