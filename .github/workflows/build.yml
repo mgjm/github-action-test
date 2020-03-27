@@ -32,6 +32,8 @@ jobs:
 
       - name: Upload ${{ matrix.wheel }}-${{ matrix.test }}.txt
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: https://uploads.github.com/repos/mgjm/github-action-test/releases/1/assets{?name,label}
           asset_path: artifact.txt
