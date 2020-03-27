@@ -35,7 +35,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: https://uploads.github.com/repos/mgjm/github-action-test/releases/tag-master/assets{?name,label}
+          upload_url: https://uploads.github.com/repos/mgjm/github-action-test/releases/24946958/assets{?name,label}
           asset_path: artifact.txt
           asset_name: ${{ matrix.wheel }}-${{ matrix.test }}.txt
           asset_content_type: text/plain
