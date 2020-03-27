@@ -6,17 +6,9 @@ on:
       - master
 
 jobs:
-  setup:
-    name: Setup environment
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup environment
-        run: echo Setup...
-
   build:
     name: ${{ matrix.wheel }} (${{matrix.test}})
     runs-on: ubuntu-latest
-    needs: setup
     container:
       image: debian:10
 
@@ -24,21 +16,24 @@ jobs:
       matrix:
         wheel:
           - demo
+          - demo2
         test:
           - 1
           - 2
           - 3
+      fail-fast: false
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Execute ${{ matrix.wheel }}/build.sh
         run: exec ${{ matrix.wheel }}/build.sh
 
-  done:
-    name: Done with environment
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Done
-        run: echo Done...
+      - name: Upload ${{ matrix.wheel }}-${{ matrix.test }}.txt
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: https://uploads.github.com/repos/mgjm/github-action-test/releases/tag-master/assets{?name,label}
+          asset_path: artifact.txt
+          asset_name: ${{ matrix.wheel }}-${{ matrix.test }}.txt
+          asset_content_type: text/plain

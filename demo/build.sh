@@ -24,4 +24,6 @@ run echo 123
 section demo-end
 run true
 
+run sh -c 'date > artifact.txt'
+
 section demo-end2
