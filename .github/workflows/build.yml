@@ -1,4 +1,4 @@
-name: CI
+name: Build
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Build ${{ matrix.wheel }}
+    name: ${{ matrix.wheel }}
     runs-on: ubuntu-latest
     container:
       image: debian:10
@@ -22,9 +22,4 @@ jobs:
 
       - name: Execute ${{ matrix.wheel }}/build.sh
         run: |
-          pwd
-          mount
-          ls -al
-          ls -al *
-          find .
           exec ${{ matrix.wheel }}/build.sh

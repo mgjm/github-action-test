@@ -5,6 +5,11 @@ section() {
 }
 
 run() {
+	echo "##[command]##[group]Execute $1"
+	echo "##[endgroup]"
+	echo "##[group]##[command]Execute $1"
+	echo "##[endgroup]"
+
 	echo "##[command]$@"
 	echo "##[group]Execute $1"
 	local code=0
