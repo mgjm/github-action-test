@@ -46,7 +46,14 @@ jobs:
               release_id: 24946958,
             });
             console.log(assets);
-            const assets2 = (assets.data || assets).filter(a => a.name === name);
+            const [asset] = (assets.data || assets).filter(a => a.name === name);
+            if(asset) {
+              await github.repos.deleteReleaseAsset({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                asset_id: asset.id,
+              });
+            }
 
             await github.repos.uploadReleaseAsset({
               url: 'https://uploads.github.com/repos/mgjm/github-action-test/releases/24946958/assets{?name,label}',
