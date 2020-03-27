@@ -31,11 +31,17 @@ jobs:
         run: exec ${{ matrix.wheel }}/build.sh
 
       - name: Upload ${{ matrix.wheel }}-${{ matrix.test }}.txt
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/github-script@0.9.0
         with:
-          upload_url: https://uploads.github.com/repos/mgjm/github-action-test/releases/24946958/assets{?name,label}
-          asset_path: artifact.txt
-          asset_name: ${{ matrix.wheel }}-${{ matrix.test }}.txt
-          asset_content_type: text/plain
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const path = 'artifact.txt';
+            await github.repos.uploadReleaseAsset({
+              url: 'https://uploads.github.com/repos/mgjm/github-action-test/releases/24946958/assets{?name,label}',
+              headers: {
+                'content-type': 'text/plain',
+                'content-length': fs.statSync(filePath).size,
+              },
+              name: '${{ matrix.wheel }}-${{ matrix.test }}.txt',
+              file: fs.readFileSync(path),
+            });
