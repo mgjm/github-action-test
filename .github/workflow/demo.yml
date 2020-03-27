@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build ${{ matrix.wheel }}
+
+    strategy:
+      matrix:
+        wheel:
+          - demo
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Execute ${{ matrix.wheel }}
+        run: echo '${{ matrix.wheel }}'
+
+      - name: Execute ${{ matrix.wheel }} in Docker
+        container: debian:10
+        run: echo '${{ matrix.wheel }}'
