@@ -28,7 +28,7 @@ jobs:
             await github.git.updateRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: 'refs/tags/tag-master',
+              ref: 'tags/tag-master',
               sha: context.sha,
               force: true,
             });
