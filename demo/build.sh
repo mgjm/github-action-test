@@ -7,11 +7,8 @@ section() {
 run() {
 	echo "##[command]$@"
 	echo "##[group]Execute $1"
-	local code
-	if "$@"; then
-		:
-	fi
-	code=$?
+	local code=0
+	"$@" || code=$?
 	echo "##[endgroup]"
 	echo "CODE=$code"
 	return $code
