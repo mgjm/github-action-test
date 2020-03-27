@@ -41,7 +41,7 @@ jobs:
               url: 'https://uploads.github.com/repos/mgjm/github-action-test/releases/24946958/assets{?name,label}',
               headers: {
                 'content-type': 'text/plain',
-                'content-length': fs.statSync(filePath).size,
+                'content-length': fs.statSync(path).size,
               },
               name: '${{ matrix.wheel }}-${{ matrix.test }}.txt',
               file: fs.readFileSync(path),
