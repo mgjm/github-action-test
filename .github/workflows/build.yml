@@ -38,7 +38,7 @@ jobs:
             const fs = require('fs');
 
             const path = 'artifact.txt';
-            const name = '${{ matrix.wheel }}-${{ matrix.test }}'artifact.txt';
+            const name = '${{ matrix.wheel }}-${{ matrix.test }}.txt';
 
             const assets = await github.repos.listAssetsForRelease({
               owner: context.repo.owner,
