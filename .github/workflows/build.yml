@@ -7,24 +7,24 @@ on:
 
 jobs:
   release:
-    name: Update Release
+    name: Release
     runs-on: ubuntu-latest
 
     steps:
-      - name: Update release
+      - name: Update release info
         uses: actions/github-script@0.9.0
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const release = 24946958;
 
-            console.log({...context});
             await github.repos.updateRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
               release_id: release,
               body: `Last build at ${new Date().toUTCString()}.`,
             });
+
             await github.git.updateRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -66,7 +66,7 @@ jobs:
 
             const release = 24946958;
             const path = 'artifact.txt';
-            const name = '${{ matrix.wheel }}-${{ matrix.test }}.txt';
+            const name = process.env.ARTIFACT_NAME;
 
             console.log('Fetch current assets');
             const assets = await github.repos.listAssetsForRelease({
