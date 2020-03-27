@@ -36,13 +36,24 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const fs = require('fs');
+
             const path = 'artifact.txt';
+            const name = '${{ matrix.wheel }}-${{ matrix.test }}'artifact.txt';
+
+            const assets = await github.repos.listAssetsForRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: 24946958,
+            });
+            console.log(assets);
+            const assets2 = (assets.data || assets).filter(a => a.name === name);
+
             await github.repos.uploadReleaseAsset({
               url: 'https://uploads.github.com/repos/mgjm/github-action-test/releases/24946958/assets{?name,label}',
               headers: {
                 'content-type': 'text/plain',
                 'content-length': fs.statSync(path).size,
               },
-              name: '${{ matrix.wheel }}-${{ matrix.test }}.txt',
+              name,
               file: fs.readFileSync(path),
             });
