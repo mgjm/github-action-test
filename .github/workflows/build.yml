@@ -6,6 +6,34 @@ on:
       - master
 
 jobs:
+  release:
+    name: Update Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Update release
+        uses: actions/github-script@0.9.0
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const release = 24946958;
+
+            console.log({...context});
+            const assets = await github.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: release,
+              body: `Last build at ${new Date().toUTCString()}.`,
+            });
+            const assets = await github.git.updateRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/tag-master'
+              release_id: release,
+              sha: context.sha,
+              force: true,
+            });
+
   build:
     name: ${{ matrix.wheel }} (${{matrix.test}})
     runs-on: ubuntu-latest
