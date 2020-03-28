@@ -65,8 +65,8 @@ jobs:
             const fs = require('fs');
 
             const release = 24946958;
-            const path = 'artifact.txt';
-            const name = process.env.ARTIFACT_NAME;
+            const path = process.env.ASSET_PATH;
+            const name = process.env.ASSET_NAME;
 
             console.log('Fetch current assets');
             const assets = await github.repos.listAssetsForRelease({

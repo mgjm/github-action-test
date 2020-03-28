@@ -4,6 +4,23 @@ section() {
 	echo "##[section]$@"
 }
 
+set_env() {
+	echo "$1=$2"
+	echo "::set-env name=$1::$2"
+}
+
+command() {
+	echo "##[command]$@"
+	"$@"
+}
+
+workdir() {
+	if [ ! -d "$1" ]; then
+		command mkdir -p "$1"
+	fi
+	command cd "$1"
+}
+
 run() {
 	echo "##[group]$@"
 	local code=0
@@ -12,14 +29,21 @@ run() {
 	return $code
 }
 
-section ---------------- Install dependencies ----------------
-run 
-run echo 123
+runsh() {
+	echo "##[group]$1"
+	local code=0
+	(sh -c "$1") || code=$?
+	echo "##[endgroup]"
+	return $code
+}
 
-section demo-end
-run true
 
-echo "::set-env name=ARTIFACT_NAME::demo-0.1.0.test.txt"
-run sh -c 'date > artifact.txt'
+section ---------------- A ----------------
+run date
 
-section demo-end2
+section ---------------- B ----------------
+run sh -c 'date > demo/my-artifact-123.txt'
+
+section ---------------- C ----------------
+set_env ASSET_PATH "$PWD/demo/my-artifact-123.txt"
+set_env ASSET_NAME "my-artifact-123.txt"
