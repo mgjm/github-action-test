@@ -27,7 +27,8 @@ jobs:
               prerelease: true,
             });
 
-            fs.writeFileSync('release.json', JSON.stringify({
+            fs.mkdirSync('release-info');
+            fs.writeFileSync('release-info/release.json', JSON.stringify({
               id: release.data.id,
               upload_url: release.data.upload_url,
             }));
@@ -36,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: release-info
-          path: release.json
+          path: release-info
 
   build:
     name: ${{ matrix.wheel }} (${{matrix.test}})
