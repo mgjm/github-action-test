@@ -42,8 +42,8 @@ section ---------------- A ----------------
 run date
 
 section ---------------- B ----------------
-run sh -c 'date > demo/my-artifact-123.txt'
+runsh 'date > demo/my-artifact-123.txt'
 
 section ---------------- C ----------------
 set_env ASSET_PATH "$PWD/demo/my-artifact-123.txt"
-set_env ASSET_NAME "my-artifact-123.txt"
+set_env ASSET_NAME "my-artifact-123-$1.txt"
