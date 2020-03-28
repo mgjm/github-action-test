@@ -11,31 +11,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Update release info
+      - name: Create draft release
         uses: actions/github-script@0.9.0
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const release = 24946958;
+            const fs = require('fs');
 
-            await github.repos.updateRelease({
+            const release = await github.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              release_id: release,
-              body: `Last build at ${new Date().toUTCString()}.`,
+              tag_name: new Date().toISOString().replace(/[T:]/g, '-').split('.')[0],
+              target_commitish: context.sha,
+              draft: true,
+              prerelease: true,
             });
 
-            await github.git.updateRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'tags/tag-master',
-              sha: context.sha,
-              force: true,
-            });
+            fs.writeFileSync('release.json', JSON.stringify({
+              id: release.data.id,
+              upload_url: release.data.upload_url,
+            }));
+
+      - name: Upload release.json
+        uses: actions/upload-artifact@v1
+        with:
+          name: release.json
+          path: release.json
 
   build:
     name: ${{ matrix.wheel }} (${{matrix.test}})
     runs-on: ubuntu-latest
+    needs: release
     container:
       image: debian:10
 
@@ -57,6 +63,11 @@ jobs:
       - name: Execute ${{ matrix.wheel }}/build.sh
         run: exec ${{ matrix.wheel }}/build.sh
 
+      - name: Download release.json
+        uses: actions/download-artifact@v1
+        with:
+          name: release.json
+
       - name: Upload ${{ matrix.wheel }}-${{ matrix.test }}.txt
         uses: actions/github-script@0.9.0
         with:
@@ -64,33 +75,43 @@ jobs:
           script: |
             const fs = require('fs');
 
-            const release = 24946958;
+            const release = JSON.parse(fs.readFileSync('release.json'), 'utf8');
             const path = process.env.ASSET_PATH;
             const name = process.env.ASSET_NAME;
+            const data = fs.readFileSync(path);
 
-            console.log('Fetch current assets');
-            const assets = await github.repos.listAssetsForRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              release_id: release,
-            });
-            const [asset] = assets.data.filter(a => a.name === name);
-            if(asset) {
-              console.log(`Delete asset ${asset.id}`);
-              await github.repos.deleteReleaseAsset({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                asset_id: asset.id,
-              });
-            }
-
-            console.log(`Upload asset ${name}`);
             await github.repos.uploadReleaseAsset({
-              url: `https://uploads.github.com/repos/${context.repo.owner}/${context.repo.repo}/releases/${release}/assets{?name,label}`,
+              url: release.upload_url,
               headers: {
                 'content-type': 'text/plain',
-                'content-length': fs.statSync(path).size,
+                'content-length': data.length,
               },
               name,
-              data: fs.readFileSync(path),
+              data,
+            });
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download release.json
+        uses: actions/download-artifact@v1
+        with:
+          name: release.json
+
+      - name: Publish release
+        uses: actions/github-script@0.9.0
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const fs = require('fs');
+
+            const release = JSON.parse(fs.readFileSync('release.json'), 'utf8');
+
+            await github.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: release.id,
+              draft: false,
             });
