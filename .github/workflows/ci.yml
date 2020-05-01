@@ -33,7 +33,9 @@ jobs:
 
       - name: Run clippy
         if: ${{ matrix.command == 'cargo test' }}
-        run: cargo clippy --message-format=json || true
+        run: |
+          ls -al "`which cargo-clippy`"
+          /usr/local/cargo/bin/cargo clippy --message-format=json || echo "Exit code $?"
 
       - name: ${{ matrix.command }}
         if: ${{ matrix.command != 'cargo clippy' && matrix.command != 'cargo test' }}
