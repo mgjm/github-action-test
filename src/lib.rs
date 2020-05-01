@@ -6,7 +6,9 @@
 pub struct Test;
 
 impl Test {
-    pub fn new() -> Self {
+    /// Create a new test.
+    #[must_use]
+    pub const fn new() -> Self {
         Self
     }
 }
