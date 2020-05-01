@@ -6,3 +6,8 @@ fn main() {
 fn test() {
     unimplemented!();
 }
+
+#[test]
+fn test2() {
+    unimplemented!();
+}

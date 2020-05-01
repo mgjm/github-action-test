@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         command:
-          - cargo test
+          - cargo test --no-fail-fast --message-format json
           - cargo clippy
           - cargo fmt -- --check
           - rm LICENSE-* && cargo apply-license && git add . && git diff --cached --exit-code
