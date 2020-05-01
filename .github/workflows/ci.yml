@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: mgjm/rust-ci
+      env:
+        RUSTFLAGS: -D warnings
 
     strategy:
       matrix:
@@ -32,8 +34,5 @@ jobs:
       - name: ${{ matrix.command }}
         if: ${{ matrix.command == 'cargo clippy' }}
         uses: actions-rs/clippy-check@v1
-        env:
-          RUSTFLAGS: -D warnings
         with:
-          name: ${{ matrix.command }}
           token: ${{ secrets.GITHUB_TOKEN }}
