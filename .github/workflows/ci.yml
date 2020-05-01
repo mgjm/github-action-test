@@ -33,7 +33,7 @@ jobs:
 
       - name: Run clippy
         if: ${{ matrix.command == 'cargo test' }}
-        run: cargo clippy --message-format=json
+        run: cargo clippy --message-format=json || true
 
       - name: ${{ matrix.command }}
         if: ${{ matrix.command != 'cargo clippy' && matrix.command != 'cargo test' }}
