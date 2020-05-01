@@ -18,7 +18,7 @@ jobs:
           - cargo test
           - cargo clippy
           - cargo fmt -- --check
-          - rm LICENSE-* && cargo apply-license && git diff --exit-code
+          - rm LICENSE-* && cargo apply-license && git add . && git diff --cached --exit-code
           - cargo readme | diff README.md /dev/stdin
           - find . -name Cargo.toml -exec cargo sort-ck {} +
       fail-fast: false
