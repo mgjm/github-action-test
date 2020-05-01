@@ -10,7 +10,7 @@ jobs:
     container:
       image: mgjm/rust-ci
       env:
-        RUSTFLAGS: -D warnings
+        PATH: .:/usr/local/cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
     strategy:
       matrix:
