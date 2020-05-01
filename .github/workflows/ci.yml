@@ -29,14 +29,16 @@ jobs:
 
       - name: Setup test as clippy
         if: ${{ matrix.command == 'cargo test' }}
-        run: echo '#!/bin/sh -e\n\nshift\ncargo test --no-fail-fast "$@" || exit 101' > "`which cargo-clippy`"
+        run: |
+          echo '#!/bin/sh -e\n\nshift\ncargo test --no-fail-fast "$@" || exit 101' > cargo
+          chmod +x cargo
 
       - name: Run clippy
         if: ${{ matrix.command == 'cargo test' }}
         run: |
-          ls -al "`which cargo-clippy`"
-          cat "`which cargo-clippy`"
-          /usr/local/cargo/bin/cargo clippy --message-format=json || echo "Exit code $?"
+          cat cargo
+          cargo clippy --message-format=json || echo "Exit code $?"
+          PATH=".:$PATH" cargo clippy --message-format=json || echo "Exit code $?"
 
       - name: ${{ matrix.command }}
         if: ${{ matrix.command != 'cargo clippy' && matrix.command != 'cargo test' }}
