@@ -30,7 +30,7 @@ jobs:
       - name: Setup test as clippy
         if: ${{ matrix.command == 'cargo test' }}
         run: |
-          echo '#!/bin/sh -e\n\nshift\ncargo test --no-fail-fast "$@" || exit 101' > cargo
+          echo '#!/bin/sh -e\n\nshift\n/usr/local/cargo/bin/cargo test --no-fail-fast "$@" || exit 101' > cargo
           chmod +x cargo
 
       - name: Run clippy
