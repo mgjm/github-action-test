@@ -1,6 +1,6 @@
 [![Crates.io](https://img.shields.io/crates/v/github-action-test.svg)](https://crates.io/crates/github-action-test)
 [![API Documentation](https://docs.rs/github-action-test/badge.svg)](https://docs.rs/github-action-test)
-[![Workflow Status](https://github.com/mgjm/github-action-test/workflows/Build/badge.svg)](https://github.com/mgjm/github-action-test/actions?query=workflow%3A%22Build%22)
+[![Workflow Status](https://github.com/mgjm/github-action-test/workflows/build/badge.svg)](https://github.com/mgjm/github-action-test/actions?query=workflow%3A%22build%22)
 
 # github-action-test
 
