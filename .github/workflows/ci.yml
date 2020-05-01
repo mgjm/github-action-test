@@ -28,4 +28,11 @@ jobs:
         uses: actions/checkout@v2
 
       - name: ${{ matrix.command }}
+        if: ${{ matrix.command != 'cargo clippy' }}
         run: ${{ matrix.command }}
+
+      - name: ${{ matrix.command }}
+        if: ${{ matrix.command == 'cargo clippy' }}
+        uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
