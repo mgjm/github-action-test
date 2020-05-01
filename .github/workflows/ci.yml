@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         command:
-          - cargo test --no-fail-fast --message-format json
+          - cargo test
           - cargo clippy
           - cargo fmt -- --check
           - rm LICENSE-* && cargo apply-license && git add . && git diff --cached --exit-code
@@ -27,12 +27,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Setup test as clippy
+        if: ${{ matrix.command == 'cargo test' }}
+        run: echo -e '#!/bin/sh -e\n\nexec cargo test --no-fail-fast "$@"' > "`which cargo-clippy`"
+
       - name: ${{ matrix.command }}
-        if: ${{ matrix.command != 'cargo clippy' }}
+        if: ${{ matrix.command != 'cargo clippy' || matrix.command != 'cargo test' }}
         run: ${{ matrix.command }}
 
       - name: ${{ matrix.command }}
-        if: ${{ matrix.command == 'cargo clippy' }}
+        if: ${{ matrix.command == 'cargo clippy' || matrix.command == 'cargo test' }}
         uses: actions-rs/clippy-check@v1
         with:
+          name: ${{ matrix.command }}
           token: ${{ secrets.GITHUB_TOKEN }}
