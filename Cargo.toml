@@ -1,0 +1,13 @@
+[package]
+name = "github-action-test"
+version = "0.1.0"
+authors = ["Martin Michaelis <code@mgjm.de>"]
+description = "A test to test the github actions pipeline"
+repository = "https://github.com/mgjm/github-action-test"
+readme = "README.md"
+keywords = ["test"]
+categories = ["test"]
+license = "MIT OR Apache-2.0"
+edition = "2018"
+
+[dependencies]
