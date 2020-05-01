@@ -17,10 +17,10 @@ jobs:
         command:
           - cargo test
           - cargo clippy
-          - cargo fmt -- --check
-          - rm LICENSE-* && cargo apply-license && git add . && git diff --cached --exit-code
-          - cargo readme | diff README.md /dev/stdin
-          - find . -name Cargo.toml -exec cargo sort-ck {} +
+          # - cargo fmt -- --check
+          # - rm LICENSE-* && cargo apply-license && git add . && git diff --cached --exit-code
+          # - cargo readme | diff README.md /dev/stdin
+          # - find . -name Cargo.toml -exec cargo sort-ck {} +
       fail-fast: false
 
     steps:
@@ -30,6 +30,10 @@ jobs:
       - name: Setup test as clippy
         if: ${{ matrix.command == 'cargo test' }}
         run: echo -e '#!/bin/sh -e\n\nexec cargo test --no-fail-fast "$@"' > "`which cargo-clippy`"
+
+      - name: Run clippy
+        if: ${{ matrix.command == 'cargo test' }}
+        run: cargo clippy --message-format=json
 
       - name: ${{ matrix.command }}
         if: ${{ matrix.command != 'cargo clippy' && matrix.command != 'cargo test' }}
