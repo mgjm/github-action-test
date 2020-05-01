@@ -1,6 +1,6 @@
 [![Crates.io](https://img.shields.io/crates/v/{{crate}}.svg)](https://crates.io/crates/{{crate}})
 [![API Documentation](https://docs.rs/{{crate}}/badge.svg)](https://docs.rs/{{crate}})
-[![Workflow Status](https://github.com/mgjm/{{crate}}/workflows/test/badge.svg)](https://github.com/mgjm/{{crate}}/actions?query=workflow%3A%22test%22)
+[![Workflow Status](https://github.com/mgjm/{{crate}}/workflows/ci/badge.svg)](https://github.com/mgjm/{{crate}}/actions?query=workflow%3A%22ci%22)
 
 # {{crate}}
 
